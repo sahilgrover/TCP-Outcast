@@ -16,7 +16,7 @@ trap ctrlc SIGINT
 
 start=`date`
 exptid=`date +%b%d-%H:%M`
-rootdir=incast-$exptid
+rootdir=outcast-$exptid
 bw=100
 
 # Note: you need to make sure you report the results
@@ -26,7 +26,7 @@ bw=100
 
 for n in 5; do
     dir=$rootdir/n$n
-    python incast.py --bw $bw \
+    python outcast.py --bw $bw \
         --dir $dir \
         -t 60 \
         -n $n

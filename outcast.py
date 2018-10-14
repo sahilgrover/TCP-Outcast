@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-"CS244 Assignment 3: Incast \
+"CS244 Assignment 3: Outcast \
 This script largely based on the starter code \
 for assignment 1"
 
@@ -31,7 +31,7 @@ def cprint(s, color, cr=True):
     else:
         print T.colored(s, color),
 
-parser = argparse.ArgumentParser(description="Incast tests")
+parser = argparse.ArgumentParser(description="Outcast tests")
 parser.add_argument('--bw', '-b',
                     type=float,
                     help="Bandwidth of network links",
@@ -66,12 +66,12 @@ if not os.path.exists(args.dir):
 lg.setLogLevel('info')
 
 # Topology to be instantiated in Mininet
-class IncastTopo(Topo):
+class OutcastTopo(Topo):
     "Parking Lot Topology"
 
     def __init__(self, n=1, cpu=.1, bw=10, delay=None,
                  max_queue_size=None, **params):
-        """Incast topology with one receiver
+        """Outcast topology with one receiver
            and n clients.
            n: number of clients
            cpu: system fraction for each host
@@ -158,7 +158,7 @@ def start_tcpprobe():
 def stop_tcpprobe():
     os.system("killall -9 cat; rmmod tcp_probe &>/dev/null;")
 
-def run_incast_expt(net, n):
+def run_outcast_expt(net, n):
     "Run experiment"
 
     seconds = args.time
@@ -213,7 +213,7 @@ def main():
     "Create and run experiment"
     start = time()
 
-    topo = IncastTopo(n=args.n)
+    topo = OutcastTopo(n=args.n)
 
     host = custom(CPULimitedHost, cpu=.15)  # 15% of system bandwidth
     link = custom(TCLink, bw=args.bw, delay='1ms',
@@ -235,7 +235,7 @@ def main():
         CLI(net)
     else:
         cprint("*** Running experiment", "magenta")
-        run_incast_expt(net, n=args.n)
+        run_outcast_expt(net, n=args.n)
 
     net.stop()
     end = time()
