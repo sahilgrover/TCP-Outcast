@@ -90,31 +90,20 @@ class OutcastTopo(Topo):
         receiver = self.add_host('receiver')
 
         # Switch ports 1:uplink 2:hostlink 3:downlink
-        uplink, hostlink, downlink = 1, 2, 3
+        h0Switch, aggrSwitchPort, switchRec = 1, 2, 3
+	
+	#small sender
+	h0 = self.add_host('h0', **hconfig)
+	s1 = self.add_switch('s1')
+	aggrSwitch = self.add_switch('s2')
 
-        # The following template code creates a parking lot topology
-        # for N = 1
-
-        lastswitch = None
-        for i in range(1, n+1):
-            switch = self.add_switch('s' + str(i) )
-            host = self.add_host('h' + str(i) , **hconfig)
-
-            # Wire up receiver
-            if i == 1:
-                self.add_link(receiver, switch,
-                              port1=0, port2=uplink, **lconfig)
-            else:
-                self.add_link(lastswitch, switch,
-                              port1=downlink, port2=uplink, **lconfig)
-
-            # Wire up clients:
-            self.add_link(host, switch,
-                          port1=0, port2=hostlink, **lconfig)
-
-
-            lastswitch = switch
-
+	for i in range(1, n+1):
+	    h = self.add_host('h'+str(i), **hconfig)
+	    self.add_link(h, aggrSwitch, port1=0, port2=i, **lconfig)    
+	
+	self.add_link(h0, s1, port1=0, port2=h0Switch, **lconfig)
+	self.add_link(aggrSwitch, s1, port1=0, port2=aggrSwitchPort, **lconfig)
+	self.add_link(s1, receiver, port1=switchRec, port2=0, **lconfig)
 
         # Uncomment the next 8 lines to create a N = 3 parking lot topology
         #s2 = self.add_switch('s2')
@@ -185,12 +174,13 @@ def run_outcast_expt(net, n):
     # Hint: Use sendCmd() and waitOutput() to start iperf and wait for them to finish
     # iperf command to start flow: 'iperf -c %s -p %s -t %d -i 1 -yc > %s/iperf_%s.txt' % (recvr.IP(), 5001, seconds, args.dir, node_name)
     # Hint (not important): You may use progress(t) to track your experiment progress
-    for i in range(1, n + 1):
-        sender = net.getNodeByName('h' + str(i))
+    
+    for i in range(0, n+1):
         node_name = 'h' + str(i)
+	sender = net.getNodeByName(node_name)
         sender.sendCmd('iperf -Z reno -c %s -p %s -t %d -i 1 -yc > %s/iperf_%s.txt' % (recvr.IP(), 5001, seconds, args.dir, node_name))
-        
-    for i in range(1, n + 1):
+   
+    for i in range(0,n+1):
         sender = net.getNodeByName('h' + str(i))
         sender.waitOutput()
 

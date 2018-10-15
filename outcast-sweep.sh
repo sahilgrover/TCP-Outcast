@@ -24,7 +24,7 @@ bw=100
 # In this example, we are assuming that each
 # client is connected to port 2 on its switch.
 
-for n in 5; do
+for n in 2 6 12; do
     dir=$rootdir/n$n
     python outcast.py --bw $bw \
         --dir $dir \
@@ -34,7 +34,7 @@ for n in 5; do
         --maxy $bw \
         --xlabel 'Time (s)' \
         --ylabel 'Rate (Mbps)' \
-        -i 's.*-eth2' \
+        -i '(s2-eth[1-9].*)|(s1-eth1)' \
         -f $dir/bwm.txt \
         -o $dir/rate.png
     python util/plot_tcpprobe.py \
