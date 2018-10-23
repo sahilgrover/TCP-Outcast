@@ -92,6 +92,12 @@ if args.normalise and args.labels == []:
 bw = map(lambda e: int(e.replace('M','')), args.labels)
 idx = 0
 
+offset = 0
+offset_diff = 10
+
+def offset_data(data):
+    return [x + offset for x in data] + [offset]
+
 for f in args.files:
     data = read_list(f)
     #xaxis = map(float, col(0, data))
@@ -115,6 +121,8 @@ for f in args.files:
             except:
                 break
 
+    offset_diff = int(avg([avg(row) for key, row in rate.items() if pat_iface.match(key)]) * 1.5) + 1
+
     if args.summarise:
         for k in rate.keys():
             if pat_iface.match(k):
@@ -128,7 +136,8 @@ for f in args.files:
         for k in sorted(rate.keys()):
             if pat_iface.match(k):
                 print k
-                plt.plot(rate[k], label=k)
+                plt.fill(offset_data(rate[k]), label=k, zorder=-1 * offset)
+                offset += offset_diff
 
 plt.title("TX rates")
 if args.rx:
@@ -143,7 +152,8 @@ else:
 
 plt.grid()
 plt.legend()
-plt.ylim((int(args.miny), int(args.maxy)))
+maxy = max([int(args.maxy), offset + offset_diff])
+plt.ylim((int(args.miny), int(maxy)))
 
 if args.summarise:
     plt.boxplot(to_plot)
