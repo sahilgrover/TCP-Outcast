@@ -75,6 +75,7 @@ parser.add_argument('--normalize',
                     dest="normalise")
 
 args = parser.parse_args()
+print args
 if args.labels is None:
     args.labels = args.files
 
