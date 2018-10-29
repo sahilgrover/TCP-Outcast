@@ -31,7 +31,7 @@ def main():
 
     print "*** Dumping network connections:"
     dumpNetConnections(net)
-    raw_args = shlex.split("/home/ubuntu/pox/pox.py riplpox.riplpox --topo=ft,%s --routing=random" % k)
+    raw_args = shlex.split("/home/ubuntu/pox/pox.py riplpox.riplpox --topo=ft,%s --routing=hashed" % k)
 
     proc = Popen(raw_args)
 
@@ -73,7 +73,7 @@ def main():
     
     for p in range(k):  # Pod Range
         for e in range(2):  # Edge range
-            for h in range(2, 4):  # Host Range
+            for h in range(2, (k/2)+2):  # Host Range
                 if p == 0 and e == 0: 
                     continue
                 
@@ -83,7 +83,7 @@ def main():
    
     for p in range(k):  # Pod Range
         for e in range(2):  # Edge range
-            for h in range(2, 4):  # Host Range
+            for h in range(2, (k/2)+2):  # Host Range
                 if p == 0 and e == 0: 
                     continue
                 node_name = '_'.join(str(x) for x in [p, e, h])

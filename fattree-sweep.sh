@@ -24,13 +24,15 @@ bw=100
 # In this example, we are assuming that each
 # client is connected to port 2 on its switch.
 
-for n in 4 6 8; do
+for n in 4; do
     dir=$rootdir/n$n
     python outcastfattopo.py --bw $bw \
         --dir $dir \
         -t 60 \
         -n $n
-    i=[0-${n}]_._.-eth[1-9].*
+    #i=[0-${n-1}]_[0-1]_[0-1]-eth[1-2].
+    #i=[0-${n-1}]_[0-1]_[0-1]-eth2
+    i=[0-${n-1}]_[0-1]_1-eth4
     python util/plot_rate.py --rx \
         --maxy $bw \
         --xlabel 'Time (s)' \
