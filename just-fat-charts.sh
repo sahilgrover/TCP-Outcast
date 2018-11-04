@@ -18,9 +18,12 @@ bw=100
 
 for dir in $1/*; do
     echo $dir
-    i=[0-${dir:22}]_._.-eth[1-9].*
+    n=${dir:22}
+    i=[0-${n-1}]_[0-1]_1-eth4
     python util/plot_rate.py --rx \
         --maxy $bw \
+	--maxx 60 \
+	--metric 'max' \
         --xlabel 'Time (s)' \
         --ylabel 'Rate (Mbps)' \
         -i $i \

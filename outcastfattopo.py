@@ -14,6 +14,7 @@ from mininet.net import Mininet
 from mininet.util import custom, dumpNetConnections
 
 from util.monitor import monitor_devs_ng
+
 # we get arg parsing for free!
 from outcast import start_tcpprobe, stop_tcpprobe, args, waitListening
 
@@ -31,7 +32,7 @@ def main():
 
     print "*** Dumping network connections:"
     dumpNetConnections(net)
-    raw_args = shlex.split("/home/ubuntu/pox/pox.py riplpox.riplpox --topo=ft,%s --routing=hashed" % k)
+    raw_args = shlex.split("/home/ubuntu/pox/pox.py riplpox.riplpox --topo=ft,%s --routing=%s" % (k, args.routing))
 
     proc = Popen(raw_args)
 

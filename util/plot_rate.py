@@ -62,6 +62,18 @@ parser.add_argument('--maxy',
                     action="store",
                     dest="maxy")
 
+parser.add_argument('--maxx',
+                    help="Max sec on x-axis..",
+                    default=60,
+                    action="store",
+                    dest="maxx")
+
+parser.add_argument('--metric',
+                    help="Metric for chart spacing.",
+                    default='avg',
+                    action="store",
+                    dest="metric")
+
 parser.add_argument('--miny',
                     help="Min mbps on y-axis..",
                     default=0,
@@ -122,7 +134,10 @@ for f in args.files:
             except:
                 break
 
-    offset_diff = int(avg([avg(row) for key, row in rate.items() if pat_iface.match(key)]) * 1.5) + 1
+    metric = avg
+    if args.metric == 'max':
+        metric = lambda l: max(l) / 2
+    offset_diff = int(metric([metric(row) for key, row in rate.items() if pat_iface.match(key)]) * 1.5) + 1
 
     if args.summarise:
         for k in rate.keys():
@@ -152,9 +167,15 @@ else:
     plt.ylabel("Mbps")
 
 plt.grid()
-plt.legend()
+plt.legend(loc="upper left", bbox_to_anchor=(1,1))
 maxy = max([int(args.maxy), offset + offset_diff])
 plt.ylim((int(args.miny), int(maxy)))
+maxx = int(args.maxx)
+plt.xlim((0, maxx))
+ax = plt.subplot(111)
+box = ax.get_position()
+ax.set_position([box.x0, box.y0,
+                 box.width * 0.8, box.height])
 
 if args.summarise:
     plt.boxplot(to_plot)
@@ -166,7 +187,7 @@ if not args.summarise:
     else:
         plt.xlabel("Time")
     if args.legend:
-        plt.legend(args.legend)
+        plt.legend(args.legend, loc="upper left", bbox_to_anchor=(1,1))
 
 if args.out:
     plt.savefig(args.out)

@@ -57,6 +57,11 @@ parser.add_argument('--time', '-t',
                     help="Duration of the experiment.",
                     default=60)
 
+parser.add_argument('--routing', '-r',
+                    dest="routing",
+                    help="Routing to use.",
+                    default="hashed")
+
 # Expt parameters
 args = parser.parse_args()
 
