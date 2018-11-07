@@ -40,7 +40,7 @@ for n in 4; do
 	--routing $routing
     #i=[0-${n-1}]_[0-1]_[0-1]-eth[1-2].
     #i=[0-${n-1}]_[0-1]_[0-1]-eth2
-    i=[0-${n-1}]_[0-1]_1-eth4
+    i=[0-$((n-1))]_[0-1]_1-eth4
     python util/plot_rate.py --rx \
         --maxy $bw \
 	--maxx 60 \

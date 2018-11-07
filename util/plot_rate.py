@@ -167,7 +167,7 @@ else:
     plt.ylabel("Mbps")
 
 plt.grid()
-plt.legend(loc="upper left", bbox_to_anchor=(1,1))
+
 maxy = max([int(args.maxy), offset + offset_diff])
 plt.ylim((int(args.miny), int(maxy)))
 maxx = int(args.maxx)
@@ -176,6 +176,8 @@ ax = plt.subplot(111)
 box = ax.get_position()
 ax.set_position([box.x0, box.y0,
                  box.width * 0.8, box.height])
+handles, labels = ax.get_legend_handles_labels()
+ax.legend(handles[::-1], labels[::-1], loc="upper left", bbox_to_anchor=(1,1))
 
 if args.summarise:
     plt.boxplot(to_plot)
