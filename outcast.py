@@ -1,9 +1,5 @@
 #!/usr/bin/python
 
-"CS244 Assignment 3: Outcast \
-This script largely based on the starter code \
-for assignment 1"
-
 from mininet.topo import Topo
 from mininet.net import Mininet
 from mininet.log import lg, output
